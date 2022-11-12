@@ -1,0 +1,16 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "Node app with Typescript",
+  "main": "index.js",
+  "repository": "git@github.com:Eddwiin/Paya.git",
+  "author": "Eddwiin",
+  "license": "MIT",
+  "scripts": {
+    "start": "npx tsc && node dist/index.js"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4",
+    "@types/node": "^18.11.9"
+  }
+}
