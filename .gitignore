@@ -9,7 +9,8 @@
 /coverage
 
 # production
-/build
+*/build
+*/dist
 
 # misc
 .DS_Store
@@ -23,4 +24,3 @@ yarn-debug.log*
 yarn-error.log*
 
 # dist
-api/dist
