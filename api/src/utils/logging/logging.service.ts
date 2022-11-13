@@ -29,8 +29,20 @@ export class LoggingServive {
         let copyOfInst = this.getInstance(key) as string[];
         copyOfInst = [...copyOfInst, message];
         LoggingServive.instance.logs[key] = [...copyOfInst];
+        this.displayLogInConsole(key, message);
     }
 
+    private static displayLogInConsole(key: LogEnum, message: string) {
+        switch (key) {
+            case LogEnum.INFORMATIONS:
+                console.log(`[INFO]: ${message}`);
+                break;
+
+            case LogEnum.ERRORS:
+                console.error(`[ERROR]: ${message}`);
+                break;
+        }
+    }
     private static getInstanceByKey(key: LogEnum) {
         return LoggingServive.instance.logs[key];
     }
