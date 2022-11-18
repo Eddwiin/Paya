@@ -2,9 +2,13 @@ import { createServer } from 'http';
 import { LogEnum, LoggingServive } from '../utils/logging/logging.service';
 import process from 'node:process';
 import { Cluster } from './cluster';
+import { Class } from '../decorators/inject';
+import { initRoutes } from './route';
+import express, { Express } from 'express';
+@Class
 export class App {
-    private instance: any = null;
-    private cluster = new Cluster();
+    private instance: Express = null;
+    private cluster: Cluster = new Cluster();
 
     constructor() { }
 
@@ -13,7 +17,7 @@ export class App {
             if (this.cluster.isPrimary()) {
                 this.cluster.fork()
             } else {
-                this.instance = this.createServer();
+                this.instance = express();
                 LoggingServive.pushLog(LogEnum.INFORMATIONS, `Worker ${process.pid} started`)
             }
         }
@@ -25,6 +29,7 @@ export class App {
         const server = this.getInstance();
 
         if (server) {
+            initRoutes(server);
             server.listen(port, hostname, () => {
                 let message = `Server running at http://${hostname}:${port}/`;
                 LoggingServive.pushLog(LogEnum.INFORMATIONS, message)
@@ -32,12 +37,4 @@ export class App {
         }
     }
 
-    private createServer() {
-        return createServer((req, res) => {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end('Hello World');
-        })
-
-    }
 }
