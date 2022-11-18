@@ -1,5 +1,5 @@
 import { createServer } from 'http';
-import { LogEnum, LoggingServive } from '../utils/logging/logging.service';
+import { LogEnum, LoggingService } from '../utils/logging/logging.service';
 import process from 'node:process';
 import { Cluster } from './cluster';
 import { Class } from '../decorators/inject';
@@ -18,7 +18,7 @@ export class App {
                 this.cluster.fork()
             } else {
                 this.instance = express();
-                LoggingServive.pushLog(LogEnum.INFORMATIONS, `Worker ${process.pid} started`)
+                LoggingService.pushLog(LogEnum.INFO, `Worker ${process.pid} started`)
             }
         }
 
@@ -32,7 +32,7 @@ export class App {
             initRoutes(server);
             server.listen(port, hostname, () => {
                 let message = `Server running at http://${hostname}:${port}/`;
-                LoggingServive.pushLog(LogEnum.INFORMATIONS, message)
+                LoggingService.pushLog(LogEnum.INFO, message)
             })
         }
     }

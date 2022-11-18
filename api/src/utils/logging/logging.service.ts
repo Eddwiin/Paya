@@ -1,49 +1,32 @@
 
+import log4js from 'log4js';
+
+log4js.configure({
+    appenders: { server: { type: "file", filename: "server.log" } },
+    categories: { default: { appenders: ["server"], level: "error" } }
+})
+
 export enum LogEnum {
-    INFORMATIONS = "informations",
-    ERRORS = "errors"
+    INFO = "info",
+    ERROR = "error",
 }
 
-export type LogType = { [key in LogEnum]: string[]; }
+export class LoggingService {
+    private static instance: LoggingService = null;
+    private static logger = log4js.getLogger();
 
-export class LoggingServive {
-    private static instance: LoggingServive = null;
-    private logs: LogType;
+    private constructor() { }
 
-    private constructor() {
-        this.logs = {
-            [LogEnum.INFORMATIONS]: [],
-            [LogEnum.ERRORS]: []
-        }
-    }
-
-    public static getInstance(key?: LogEnum) {
-        if (LoggingServive.instance === null) {
-            LoggingServive.instance = new LoggingServive();
+    public static getInstance() {
+        if (LoggingService.instance === null) {
+            LoggingService.instance = new LoggingService();
         }
 
-        return LoggingServive.getInstanceByKey(key) || LoggingServive.instance.logs;
+        return LoggingService.instance;
     }
 
     public static pushLog(key: LogEnum, message: string) {
-        let copyOfInst = this.getInstance(key) as string[];
-        copyOfInst = [...copyOfInst, message];
-        LoggingServive.instance.logs[key] = [...copyOfInst];
-        this.displayLogInConsole(key, message);
-    }
-
-    private static displayLogInConsole(key: LogEnum, message: string) {
-        switch (key) {
-            case LogEnum.INFORMATIONS:
-                console.log(`[INFO]: ${message}`);
-                break;
-
-            case LogEnum.ERRORS:
-                console.error(`[ERROR]: ${message}`);
-                break;
-        }
-    }
-    private static getInstanceByKey(key: LogEnum) {
-        return LoggingServive.instance.logs[key];
+        LoggingService.logger.level = "debug";
+        LoggingService.logger[key](message);
     }
 }

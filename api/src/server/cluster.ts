@@ -1,6 +1,6 @@
 import { cpus } from 'node:os';
 import cluster from 'node:cluster';
-import { LogEnum, LoggingServive } from '../utils/logging/logging.service';
+import { LogEnum, LoggingService } from '../utils/logging/logging.service';
 
 export class Cluster {
     numCPUs: number;
@@ -23,7 +23,7 @@ export class Cluster {
 
     private onClusterExit() {
         cluster.on('exit', (worker) => {
-            LoggingServive.pushLog(LogEnum.INFORMATIONS, `worker ${worker.process.pid} died`)
+            LoggingService.pushLog(LogEnum.INFO, `worker ${worker.process.pid} died`)
         })
     }
 }
