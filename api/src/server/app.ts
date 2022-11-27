@@ -2,10 +2,8 @@ import { createServer } from 'http';
 import { LogEnum, LoggingService } from '../utils/logging/logging.service';
 import process from 'node:process';
 import { Cluster } from './cluster';
-import { Class } from '../decorators/inject';
 import { initRoutes } from './route';
 import express, { Express } from 'express';
-@Class
 export class App {
     private instance: Express = null;
     private cluster: Cluster = new Cluster();
